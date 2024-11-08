@@ -5,98 +5,119 @@ Choose your preferred framework/approach:
 - Vue.js with TypeScript
 - Vanilla TypeScript
 
-### Task: Implement an Infinite Scroll Post List
+### Task: Pokemon Directory with Dynamic Loading
 
-Create a component that loads and displays posts with infinite scroll functionality.
+Create a component that displays Pokemon from the PokeAPI with either infinite scroll or pagination (your choice). Additionally, implement a feature to view basic Pokemon details.
+
+### API Endpoints:
+- List: `https://pokeapi.co/api/v2/pokemon?limit=5`
+- Details: `https://pokeapi.co/api/v2/pokemon/{id or name}`
 
 ```typescript
-interface Post {
-  id: number;
-  title: string;
-  excerpt: string;
-  timestamp: number;
+interface PokemonListResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: {
+    name: string;
+    url: string;
+  }[];
 }
 
-interface ApiResponse {
-  posts: Post[];
-  hasMore: boolean;
-  nextCursor?: string;
+interface PokemonBasicDetails {
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
+  types: {
+    type: {
+      name: string;
+    };
+  }[];
 }
 ```
 
 ### Requirements:
 
-1. Implement a posts list that:
-   - Loads initial batch of posts
-   - Supports infinite scroll
+1. Create a Pokemon list that:
+   - Loads 5 Pokemon at a time
+   - Implements either infinite scroll OR pagination
    - Shows loading states
    - Handles errors gracefully
 
-2. Include basic error handling and loading states
+2. When clicking a Pokemon:
+   - Load and display its image and types
+   - Show loading state while fetching
+   - Handle errors appropriately
 
-3. Implement efficient scroll detection and loading
-
-### API Mock:
-```typescript
-// You can use this mock API function in your implementation
-const fetchPosts = async (cursor?: string): Promise => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Mock response
-  return {
-    posts: [
-      {
-        id: 1,
-        title: "First Post",
-        excerpt: "This is the first post content",
-        timestamp: Date.now()
-      },
-      // ... more posts
-    ],
-    hasMore: true,
-    nextCursor: "next_page_token"
-  };
-};
-```
+3. Implement clean state management for:
+   - Pokemon list
+   - Currently selected Pokemon
+   - Loading states
+   - Error states
 
 ### Sample Implementation Structure (adapt to your chosen framework):
 
 ```typescript
-// React example (adapt as needed for Vue or vanilla TS)
-interface PostListProps {
-  pageSize?: number;
+// Types
+interface PokemonListProps {
+  itemsPerPage?: number;
 }
 
-const PostList = ({ pageSize = 10 }: PostListProps) => {
-  // TODO: Implement state management for posts
-  // TODO: Implement infinite scroll detection
-  // TODO: Implement post fetching logic
+// Component Example (adapt based on your chosen framework)
+const PokemonDirectory = ({ itemsPerPage = 5 }: PokemonListProps) => {
+  // TODO: Implement state management for pokemon list and selected pokemon
+  // TODO: Implement loading mechanism (infinite scroll or pagination)
+  // TODO: Implement pokemon selection and detail fetching
   // TODO: Implement loading & error states
   
   return (
-    // TODO: Implement your UI
+    <div>
+      {/* List view */}
+      <div className="pokemon-list">
+        {/* Implement your list here */}
+      </div>
+
+      {/* Selected Pokemon view */}
+      <div className="pokemon-details">
+        {/* Implement your detail view here */}
+      </div>
+    </div>
   );
 };
 ```
 
 ### Evaluation Criteria:
-1. Code Quality:
+
+1. Code Quality (40%):
    - TypeScript usage
    - Error handling
-   - Performance considerations
-   - Framework best practices
-
-2. Implementation:
-   - Scroll detection efficiency
-   - Loading state handling
-   - Error state handling
+   - State management approach
    - Code organization
 
-### Bonus Points (if time permits):
-- Implement post filtering
-- Add smooth loading animations
-- Implement virtual scrolling for performance
-- Add unit tests
+2. Functionality (40%):
+   - Working data loading
+   - Proper loading states
+   - Error handling
+   - Pokemon detail display
 
-Note: Focus on getting the core functionality working first. Bonus features should only be attempted if you complete the main requirements ahead of time.
+3. UX Considerations (20%):
+   - Smooth loading experience
+   - Clear loading indicators
+   - Error messages
+   - Responsive design
+
+### Bonus Points (if time permits):
+- Add a search by Pokemon name
+- Implement both infinite scroll AND pagination
+- Add a "favorite Pokemon" feature using local storage
+- Add basic animations for loading/transitions
+
+Note: Prioritize completing the core requirements before attempting bonus features. We're looking for clean, working code rather than partially implemented features.
+
+### Tips:
+- Use the `limit` and `offset` query parameters for pagination
+- Consider debouncing scroll events if implementing infinite scroll
+- Use TypeScript effectively to handle API response types
+- Focus on error handling for both network and edge cases
